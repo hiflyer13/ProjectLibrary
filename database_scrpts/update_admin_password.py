@@ -14,21 +14,17 @@ try:
         # Create a cursor object within the 'with' block
         with conn.cursor() as cursor:
             # Create a sample table
-            create_table_query = '''
-            CREATE TABLE books (
-                id SERIAL PRIMARY KEY,
-                author VARCHAR(255) NOT NULL,
-                title VARCHAR(255) NOT NULL,
-                language VARCHAR(2) NOT NULL,
-                pages INT NOT NULL,
-                isbn VARCHAR NOT NULL,
-                year INT NOT NULL
-            );
-            '''
-            cursor.execute(create_table_query)
+            action = '''
+                        UPDATE users
+                        SET password = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'
+                        WHERE email = 'admin@admin.com';
+                    '''
+            cursor.execute(action)
             conn.commit()
-            print("Table created successfully.")
+            print("Password updated successfully")
 
 except psycopg2.Error as e:
     print("Error connecting to the database:", e)
+
+
 

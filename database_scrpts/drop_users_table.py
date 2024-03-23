@@ -15,20 +15,11 @@ try:
         with conn.cursor() as cursor:
             # Create a sample table
             create_table_query = '''
-            CREATE TABLE books (
-                id SERIAL PRIMARY KEY,
-                author VARCHAR(255) NOT NULL,
-                title VARCHAR(255) NOT NULL,
-                language VARCHAR(2) NOT NULL,
-                pages INT NOT NULL,
-                isbn VARCHAR NOT NULL,
-                year INT NOT NULL
-            );
+                DROP table books;
             '''
             cursor.execute(create_table_query)
             conn.commit()
-            print("Table created successfully.")
+            print("Table removed successfully.")
 
 except psycopg2.Error as e:
     print("Error connecting to the database:", e)
-

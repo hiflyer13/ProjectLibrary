@@ -2,7 +2,8 @@
 
 
 from colorama import Fore, Back, Style
-from signup import *
+import signup
+import login
 
 
 class InvalidSelection(Exception):
@@ -24,11 +25,13 @@ def main_screen():
             print(Fore.RED + "Value Error" + Style.RESET_ALL)
         else:
             if selection == 1:
-                return 1
+                signup.main()
+                break
             elif selection == 2:
-                return 2
+                login.main()
+                break
             else:
-                return 3
+                exit()
 
 
 first_input = main_screen()

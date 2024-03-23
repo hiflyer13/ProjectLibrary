@@ -5,6 +5,7 @@ import hashlib
 import pandas as pd
 import psycopg2
 import re
+from signup import *
 
 
 class InvalidPassword(Exception):
@@ -42,6 +43,8 @@ def load_users():
                 if rows:
                     df = pd.DataFrame(rows, columns=['email', 'read', 'change', 'admin', 'locked'])
                     print("DataFrame for the '{}' table:".format(table_name))
+                    pd.set_option('display.max_rows', None)
+                    pd.set_option('display.max_columns', None)
                     print(df)
                 else:
                     print("No data found in the '{}' table.".format(table_name))
@@ -52,22 +55,6 @@ def load_users():
 
 
 def user_choice():
-    while True:
-        try:
-            selection = int(input(Fore.GREEN + "Type the index of the user who you want to work with: " + Style.RESET_ALL))
-            if selection not in range(1, len(users)):
-                raise InvalidSelection
-        except InvalidSelection:
-            print(Fore.RED + "Invalid Selection" + Style.RESET_ALL)
-        except ValueError:
-            print(Fore.RED + "Value Error" + Style.RESET_ALL)
-        else:
-            user_to_work_with = users["email"].loc[selection]
-            print(f"Your choice: {Fore.YELLOW + user_to_work_with + Style.RESET_ALL}")
-            return user_to_work_with
-
-
-def user_choice_2():
     print(Fore.GREEN + "ADMIN OPTIONS:" + Style.RESET_ALL)
     print(Fore.GREEN + "1 - Delete User" + Style.RESET_ALL)
     print(Fore.GREEN + "2 - Unlock User" + Style.RESET_ALL)
@@ -91,7 +78,7 @@ def user_choice_2():
             return selection
 
 
-def password():
+def password2():
     while True:
         try:
             input_password = input(Fore.GREEN + "Password: " + Style.RESET_ALL)
@@ -151,7 +138,7 @@ def admin_actions(the_user, the_action):
                     with conn.cursor() as cursor:
                         action = '''
                             UPDATE users
-                            SET locked = '0'
+                            SET login_attempts = '0'
                             WHERE email = %(input_email)s;
                         '''
                         cursor.execute(action, my_dict)
@@ -163,7 +150,7 @@ def admin_actions(the_user, the_action):
 
         case 3:
 
-            input_password = password()
+            input_password = get_password()
             my_dict = {
                 "input_password": input_password,
                 "input_email": the_user
@@ -221,12 +208,27 @@ def admin_actions(the_user, the_action):
                 print("Error connecting to the database:", e)
 
 
-press_a_key = input(Fore.GREEN + "Press enter to load the users: " + Style.RESET_ALL)
+def main():
+    press_a_key = input(Fore.GREEN + "Press enter to load the users: " + Style.RESET_ALL)
+
+    # Call the function to load and print the DataFrame
+    users = load_users()
+
+    while True:
+        try:
+            selection = int(input(Fore.GREEN + "Type the index of the user who you want to work with: " + Style.RESET_ALL))
+            if selection not in range(1, len(users)):
+                raise InvalidSelection
+        except InvalidSelection:
+            print(Fore.RED + "Invalid Selection" + Style.RESET_ALL)
+        except ValueError:
+            print(Fore.RED + "Value Error" + Style.RESET_ALL)
+        else:
+            user_to_work_with = users["email"].loc[selection]
+            print(f"Your choice: {Fore.YELLOW + user_to_work_with + Style.RESET_ALL}")
+            break
+
+    action_you_want = user_choice()
+    admin_actions(user_to_work_with, action_you_want)
 
 
-# Call the function to load and print the DataFrame
-users = load_users()
-
-your_choice = user_choice()
-action_you_want = user_choice_2()
-admin_actions(your_choice, action_you_want)

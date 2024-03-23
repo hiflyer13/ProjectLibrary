@@ -17,7 +17,7 @@ try:
         # Create a cursor object within the 'with' block
         with conn.cursor() as cursor:
             # Query to select all rows from the specified table
-            query = 'SELECT email FROM {};'.format(table_name)
+            query = 'SELECT * FROM {};'.format(table_name)
             cursor.execute(query)
             rows = cursor.fetchall()
 

@@ -33,7 +33,7 @@ config = {
 }
 
 
-def email():
+def get_email():
     # Table name to query
     table_name = 'users'
     existing_email_addresses = []
@@ -85,7 +85,7 @@ def email():
         # Later we need to check if it exists in the database. If it does, we need to return an error.
 
 
-def first_name():
+def get_first_name():
     while True:
         try:
             input_first_name = input(Fore.GREEN + "First Name: " + Style.RESET_ALL)
@@ -97,7 +97,7 @@ def first_name():
             return input_first_name
 
 
-def family_name():
+def get_family_name():
     while True:
         try:
             input_family_name = input(Fore.GREEN + "Family Name: " + Style.RESET_ALL)
@@ -109,7 +109,7 @@ def family_name():
             return input_family_name
 
 
-def birthdate():
+def get_birthdate():
     while True:
         try:
             birthdate_input = input(Fore.GREEN + "Birth date (YYYYMMDD): " + Style.RESET_ALL)
@@ -122,7 +122,7 @@ def birthdate():
             return datetime_object_string
 
 
-def password():
+def get_password():
     while True:
         try:
             input_password = input(Fore.GREEN + "Password: " + Style.RESET_ALL)
@@ -151,46 +151,49 @@ def password():
             return hash_password
 
 
-email = email()
-first_name = first_name()
-family_name = family_name()
-birthdate = birthdate()
-password = password()
-my_dict = {
-    "input_email": email,
-    "input_first_name": first_name,
-    "input_family_name": family_name,
-    "input_birthdate": birthdate,
-    "input_read": '1',
-    "input_change": '0',
-    "input_admin": '0',
-    "input_locked": '0',
-    "input_password": password
-}
-try:
-    # Establish a connection to the PostgreSQL database using 'with' statement
-    with psycopg2.connect(**config) as conn:
-        # Create a cursor object within the 'with' block
-        with conn.cursor() as cursor:
-            create_user = '''
-                INSERT INTO users (
-                email, first_name, family_name, birthdate, read, change, admin, locked, password)
-                VALUES
-                (
-                %(input_email)s,
-                %(input_first_name)s,
-                %(input_family_name)s,
-                %(input_birthdate)s,
-                %(input_read)s,
-                %(input_change)s,
-                %(input_admin)s,
-                %(input_locked)s,
-                %(input_password)s)
-            '''
-            cursor.execute(create_user, my_dict)
-            conn.commit()
-            print(Fore.GREEN + "User created successfully" + Style.RESET_ALL)
+def main():
+    email = get_email()
+    first_name = get_first_name()
+    family_name = get_family_name()
+    birthdate = get_birthdate()
+    password = get_password()
+    my_dict = {
+        "input_email": email,
+        "input_first_name": first_name,
+        "input_family_name": family_name,
+        "input_birthdate": birthdate,
+        "input_read": '1',
+        "input_change": '0',
+        "input_admin": '0',
+        "input_locked": '0',
+        "input_password": password
+    }
+    try:
+        # Establish a connection to the PostgreSQL database using 'with' statement
+        with psycopg2.connect(**config) as conn:
+            # Create a cursor object within the 'with' block
+            with conn.cursor() as cursor:
+                create_user = '''
+                    INSERT INTO users (
+                    email, first_name, family_name, birthdate, read, change, admin, locked, password)
+                    VALUES
+                    (
+                    %(input_email)s,
+                    %(input_first_name)s,
+                    %(input_family_name)s,
+                    %(input_birthdate)s,
+                    %(input_read)s,
+                    %(input_change)s,
+                    %(input_admin)s,
+                    %(input_locked)s,
+                    %(input_password)s)
+                '''
+                cursor.execute(create_user, my_dict)
+                conn.commit()
+                print(Fore.GREEN + "User created successfully" + Style.RESET_ALL)
 
-except psycopg2.Error as e:
-    print(Fore.RED + "Error connecting to the database:" + Style.RESET_ALL, e)
+    except psycopg2.Error as e:
+        print(Fore.RED + "Error connecting to the database:" + Style.RESET_ALL, e)
 
+
+#main()

@@ -14,18 +14,11 @@ try:
         # Create a cursor object within the 'with' block
         with conn.cursor() as cursor:
             # Create a sample table
-            create_table_query = '''
-            CREATE TABLE books (
-                id SERIAL PRIMARY KEY,
-                author VARCHAR(255) NOT NULL,
-                title VARCHAR(255) NOT NULL,
-                language VARCHAR(2) NOT NULL,
-                pages INT NOT NULL,
-                isbn VARCHAR NOT NULL,
-                year INT NOT NULL
-            );
+            create_column = '''
+            UPDATE users
+            SET login_attempts='0';
             '''
-            cursor.execute(create_table_query)
+            cursor.execute(create_column)
             conn.commit()
             print("Table created successfully.")
 
