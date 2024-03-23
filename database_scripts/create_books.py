@@ -15,17 +15,14 @@ try:
         with conn.cursor() as cursor:
             # Create a sample table
             create_table_query = '''
-            CREATE TABLE users (
+            CREATE TABLE books (
                 id SERIAL PRIMARY KEY,
-                email VARCHAR(255) NOT NULL,
-                first_name VARCHAR(255) NOT NULL,
-                family_name VARCHAR(255) NOT NULL,
-                birthdate DATE NOT NULL,
-                read BIT NOT NULL,
-                change BIT NOT NULL,
-                admin BIT NOT NULL,
-                locked BIT NOT NULL,
-                password VARCHAR NOT NULL
+                author VARCHAR(255) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                language VARCHAR(2) NOT NULL,
+                pages INT NOT NULL,
+                isbn VARCHAR NOT NULL,
+                year INT NOT NULL
             );
             '''
             cursor.execute(create_table_query)
@@ -35,3 +32,6 @@ try:
 except psycopg2.Error as e:
     print("Error connecting to the database:", e)
 
+
+# ISBN  must be a varchar instead of an int because it's a very long sequence of numbers and I believe
+# it's handled more efficiently when it's handled as a string.

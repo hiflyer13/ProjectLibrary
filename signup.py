@@ -165,7 +165,7 @@ def main():
         "input_read": '1',
         "input_change": '0',
         "input_admin": '0',
-        "input_locked": '0',
+        "input_login_attempts": '0',
         "input_password": password
     }
     try:
@@ -175,7 +175,7 @@ def main():
             with conn.cursor() as cursor:
                 create_user = '''
                     INSERT INTO users (
-                    email, first_name, family_name, birthdate, read, change, admin, locked, password)
+                    email, first_name, family_name, birthdate, read, change, admin, login_attempts, password)
                     VALUES
                     (
                     %(input_email)s,
@@ -185,7 +185,7 @@ def main():
                     %(input_read)s,
                     %(input_change)s,
                     %(input_admin)s,
-                    %(input_locked)s,
+                    %(input_login_attempts)s,
                     %(input_password)s)
                 '''
                 cursor.execute(create_user, my_dict)

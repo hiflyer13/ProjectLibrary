@@ -35,13 +35,13 @@ def load_users():
             # Create a cursor object within the 'with' block
             with conn.cursor() as cursor:
                 # Query to select all rows from the specified table
-                query = 'SELECT email, read, change, admin, locked FROM {};'.format(table_name)
+                query = 'SELECT email, read, change, admin, login_attempts FROM {};'.format(table_name)
                 cursor.execute(query)
                 rows = cursor.fetchall()
 
                 # Convert fetched rows into a Pandas DataFrame
                 if rows:
-                    df = pd.DataFrame(rows, columns=['email', 'read', 'change', 'admin', 'locked'])
+                    df = pd.DataFrame(rows, columns=['email', 'read', 'change', 'admin', 'login_attempts'])
                     print("DataFrame for the '{}' table:".format(table_name))
                     pd.set_option('display.max_rows', None)
                     pd.set_option('display.max_columns', None)
@@ -217,7 +217,7 @@ def main():
     while True:
         try:
             selection = int(input(Fore.GREEN + "Type the index of the user who you want to work with: " + Style.RESET_ALL))
-            if selection not in range(1, len(users)):
+            if selection not in range(0, len(users)):
                 raise InvalidSelection
         except InvalidSelection:
             print(Fore.RED + "Invalid Selection" + Style.RESET_ALL)

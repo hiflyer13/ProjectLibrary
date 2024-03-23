@@ -203,6 +203,7 @@ def change_manu():
         else:
             if selection == 1:
                 load_all_books()
+                break
             elif selection == 2:
                 pass  # TODO
             else:

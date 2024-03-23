@@ -15,14 +15,17 @@ try:
         with conn.cursor() as cursor:
             # Create a sample table
             create_table_query = '''
-            CREATE TABLE books (
+            CREATE TABLE users (
                 id SERIAL PRIMARY KEY,
-                author VARCHAR(255) NOT NULL,
-                title VARCHAR(255) NOT NULL,
-                language VARCHAR(2) NOT NULL,
-                pages INT NOT NULL,
-                isbn VARCHAR NOT NULL,
-                year INT NOT NULL
+                email VARCHAR(255) NOT NULL,
+                first_name VARCHAR(255) NOT NULL,
+                family_name VARCHAR(255) NOT NULL,
+                birthdate DATE NOT NULL,
+                read BIT NOT NULL,
+                change BIT NOT NULL,
+                admin BIT NOT NULL,
+                login_attempts INT NOT NULL,
+                password VARCHAR NOT NULL
             );
             '''
             cursor.execute(create_table_query)

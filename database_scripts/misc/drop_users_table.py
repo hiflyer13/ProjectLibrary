@@ -15,7 +15,7 @@ try:
         with conn.cursor() as cursor:
             # Create a sample table
             create_table_query = '''
-                DROP table books;
+                DROP table users;
             '''
             cursor.execute(create_table_query)
             conn.commit()
