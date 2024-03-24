@@ -3,6 +3,8 @@
 
 from colorama import Fore, Style
 import admin
+import datetime
+import os
 import pandas as pd
 import psycopg2
 
@@ -165,7 +167,282 @@ def load_all_books():
 
     except psycopg2.Error as e:
         print("Error connecting to the database:", e)
-    return df
+
+    while True:
+        try:
+            selection = input(Fore.GREEN + "Press 's' to save the results in a file or 'e' to exit program. " + Style.RESET_ALL)
+            if selection not in ["s", "e"]:
+                raise InvalidSelection
+        except InvalidSelection:
+            print(Fore.RED + "Invalid selection" + Style.RESET_ALL)
+        else:
+            if selection == "s":
+                current_time = datetime.datetime.now()
+                current_time_cleaned = current_time.strftime("%Y-%m-%d_%H-%M-%S")
+                filename = f"{current_time_cleaned}.xlsx"
+                path = os.path.join("search_results", filename)
+                df.to_excel(path, index=False)
+                break
+            else:
+                exit()
+
+
+def search_books():
+    print("Search by:")
+    print("1 - Author")
+    print("2 - Title")
+    print("3 - Language")
+    print("4 - Year")
+    print("5 - ISBN")
+
+    while True:
+        try:
+            selection = int(input(Fore.GREEN + "Your choice: " + Style.RESET_ALL))
+            if selection not in range(1, 6):
+                raise InvalidSelection
+        except ValueError:
+            print(Fore.RED + "Enter a whole number" + Style.RESET_ALL)
+        except InvalidSelection:
+            print(Fore.RED + "Invalid selection" + Style.RESET_ALL)
+        else:
+            break
+
+    match selection:
+
+        case 1:  # Author
+            search_by = input(Fore.GREEN + "Search by author: " + Style.RESET_ALL)
+            try:
+                # Establish a connection to the PostgreSQL database using 'with' statement
+                with psycopg2.connect(**config) as conn:
+                    # Create a cursor object within the 'with' block
+                    with conn.cursor() as cursor:
+                        # Query to select all rows from the specified table
+                        query = "SELECT author, title, language, pages, isbn, year from books WHERE author LIKE '%%{}%'".format(
+                            search_by)
+
+                        cursor.execute(query)
+                        rows = cursor.fetchall()
+
+                        # Convert fetched rows into a Pandas DataFrame
+                        if rows:
+                            pd.set_option('display.width', 200)
+                            df = pd.DataFrame(rows, columns=['author', 'title', 'language', 'pages', 'isbn', 'year'])
+                            pd.set_option('display.max_rows', None)
+                            pd.set_option('display.max_columns', None)
+                            print("Search results:")
+                            print(df)
+                        else:
+                            print("No data found in the books table")
+
+            except psycopg2.Error as e:
+                print("Error connecting to the database:", e)
+
+            while True:
+                try:
+                    selection = input(
+                        Fore.GREEN + "Press 's' to save the results in a file or 'e' to exit program. " + Style.RESET_ALL)
+                    if selection not in ["s", "e"]:
+                        raise InvalidSelection
+                except InvalidSelection:
+                    print(Fore.RED + "Invalid selection" + Style.RESET_ALL)
+                else:
+                    if selection == "s":
+                        current_time = datetime.datetime.now()
+                        current_time_cleaned = current_time.strftime("%Y-%m-%d_%H-%M-%S")
+                        filename = f"{current_time_cleaned}.xlsx"
+                        path = os.path.join("search_results", filename)
+                        df.to_excel(path, index=False)
+                        break
+                    else:
+                        exit()
+
+        case 2:  # Title
+            search_by = input(Fore.GREEN + "Search by title: " + Style.RESET_ALL)
+            try:
+                # Establish a connection to the PostgreSQL database using 'with' statement
+                with psycopg2.connect(**config) as conn:
+                    # Create a cursor object within the 'with' block
+                    with conn.cursor() as cursor:
+                        # Query to select all rows from the specified table
+                        query = "SELECT author, title, language, pages, isbn, year from books WHERE title LIKE '%%{}%'".format(
+                            search_by)
+
+                        cursor.execute(query)
+                        rows = cursor.fetchall()
+
+                        # Convert fetched rows into a Pandas DataFrame
+                        if rows:
+                            pd.set_option('display.width', 200)
+                            df = pd.DataFrame(rows, columns=['author', 'title', 'language', 'pages', 'isbn', 'year'])
+                            pd.set_option('display.max_rows', None)
+                            pd.set_option('display.max_columns', None)
+                            print("Search results:")
+                            print(df)
+                        else:
+                            print("No data found in the books table")
+
+            except psycopg2.Error as e:
+                print("Error connecting to the database:", e)
+
+            while True:
+                try:
+                    selection = input(
+                        Fore.GREEN + "Press 's' to save the results in a file or 'e' to exit program. " + Style.RESET_ALL)
+                    if selection not in ["s", "e"]:
+                        raise InvalidSelection
+                except InvalidSelection:
+                    print(Fore.RED + "Invalid selection" + Style.RESET_ALL)
+                else:
+                    if selection == "s":
+                        current_time = datetime.datetime.now()
+                        current_time_cleaned = current_time.strftime("%Y-%m-%d_%H-%M-%S")
+                        filename = f"{current_time_cleaned}.xlsx"
+                        path = os.path.join("search_results", filename)
+                        df.to_excel(path, index=False)
+                        break
+                    else:
+                        exit()
+
+        case 3:  # Language
+            search_by = input(Fore.GREEN + "Search by language: " + Style.RESET_ALL)
+            try:
+                # Establish a connection to the PostgreSQL database using 'with' statement
+                with psycopg2.connect(**config) as conn:
+                    # Create a cursor object within the 'with' block
+                    with conn.cursor() as cursor:
+                        # Query to select all rows from the specified table
+                        query = "SELECT author, title, language, pages, isbn, year from books WHERE language LIKE '%%{}%'".format(
+                            search_by)
+
+                        cursor.execute(query)
+                        rows = cursor.fetchall()
+
+                        # Convert fetched rows into a Pandas DataFrame
+                        if rows:
+                            pd.set_option('display.width', 200)
+                            df = pd.DataFrame(rows, columns=['author', 'title', 'language', 'pages', 'isbn', 'year'])
+                            pd.set_option('display.max_rows', None)
+                            pd.set_option('display.max_columns', None)
+                            print("Search results:")
+                            print(df)
+                        else:
+                            print("No data found in the books table")
+
+            except psycopg2.Error as e:
+                print("Error connecting to the database:", e)
+
+            while True:
+                try:
+                    selection = input(
+                        Fore.GREEN + "Press 's' to save the results in a file or 'e' to exit program. " + Style.RESET_ALL)
+                    if selection not in ["s", "e"]:
+                        raise InvalidSelection
+                except InvalidSelection:
+                    print(Fore.RED + "Invalid selection" + Style.RESET_ALL)
+                else:
+                    if selection == "s":
+                        current_time = datetime.datetime.now()
+                        current_time_cleaned = current_time.strftime("%Y-%m-%d_%H-%M-%S")
+                        filename = f"{current_time_cleaned}.xlsx"
+                        path = os.path.join("search_results", filename)
+                        df.to_excel(path, index=False)
+                        break
+                    else:
+                        exit()
+
+        case 4:  # Year
+            search_by = input(Fore.GREEN + "Search by year: " + Style.RESET_ALL)
+            try:
+                # Establish a connection to the PostgreSQL database using 'with' statement
+                with psycopg2.connect(**config) as conn:
+                    # Create a cursor object within the 'with' block
+                    with conn.cursor() as cursor:
+                        # Query to select all rows from the specified table
+                        query = "SELECT author, title, language, pages, isbn, year from books WHERE year = '{}'".format(
+                            search_by)
+
+                        cursor.execute(query)
+                        rows = cursor.fetchall()
+
+                        # Convert fetched rows into a Pandas DataFrame
+                        if rows:
+                            pd.set_option('display.width', 200)
+                            df = pd.DataFrame(rows, columns=['author', 'title', 'language', 'pages', 'isbn', 'year'])
+                            pd.set_option('display.max_rows', None)
+                            pd.set_option('display.max_columns', None)
+                            print("Search results:")
+                            print(df)
+                        else:
+                            print("No data found in the books table")
+
+            except psycopg2.Error as e:
+                print("Error connecting to the database:", e)
+
+            while True:
+                try:
+                    selection = input(
+                        Fore.GREEN + "Press 's' to save the results in a file or 'e' to exit program. " + Style.RESET_ALL)
+                    if selection not in ["s", "e"]:
+                        raise InvalidSelection
+                except InvalidSelection:
+                    print(Fore.RED + "Invalid selection" + Style.RESET_ALL)
+                else:
+                    if selection == "s":
+                        current_time = datetime.datetime.now()
+                        current_time_cleaned = current_time.strftime("%Y-%m-%d_%H-%M-%S")
+                        filename = f"{current_time_cleaned}.xlsx"
+                        path = os.path.join("search_results", filename)
+                        df.to_excel(path, index=False)
+                        break
+                    else:
+                        exit()
+
+        case 5:  # ISBN
+            search_by = input(Fore.GREEN + "Search by ISBN: " + Style.RESET_ALL)
+            try:
+                # Establish a connection to the PostgreSQL database using 'with' statement
+                with psycopg2.connect(**config) as conn:
+                    # Create a cursor object within the 'with' block
+                    with conn.cursor() as cursor:
+                        # Query to select all rows from the specified table
+                        query = "SELECT author, title, language, pages, isbn, year from books WHERE isbn LIKE '%%{}%'".format(
+                            search_by)
+
+                        cursor.execute(query)
+                        rows = cursor.fetchall()
+
+                        # Convert fetched rows into a Pandas DataFrame
+                        if rows:
+                            pd.set_option('display.width', 200)
+                            df = pd.DataFrame(rows, columns=['author', 'title', 'language', 'pages', 'isbn', 'year'])
+                            pd.set_option('display.max_rows', None)
+                            pd.set_option('display.max_columns', None)
+                            print("Search results:")
+                            print(df)
+                        else:
+                            print("No data found in the books table")
+
+            except psycopg2.Error as e:
+                print("Error connecting to the database:", e)
+
+            while True:
+                try:
+                    selection = input(
+                        Fore.GREEN + "Press 's' to save the results in a file or 'e' to exit program. " + Style.RESET_ALL)
+                    if selection not in ["s", "e"]:
+                        raise InvalidSelection
+                except InvalidSelection:
+                    print(Fore.RED + "Invalid selection" + Style.RESET_ALL)
+                else:
+                    if selection == "s":
+                        current_time = datetime.datetime.now()
+                        current_time_cleaned = current_time.strftime("%Y-%m-%d_%H-%M-%S")
+                        filename = f"{current_time_cleaned}.xlsx"
+                        path = os.path.join("search_results", filename)
+                        df.to_excel(path, index=False)
+                        break
+                    else:
+                        exit()
 
 
 def read_menu():
@@ -183,8 +460,10 @@ def read_menu():
         else:
             if selection == 1:
                 load_all_books()
+                break
             else:
-                pass  # TODO
+                search_books()
+                break
 
 
 def change_manu():
@@ -205,7 +484,8 @@ def change_manu():
                 load_all_books()
                 break
             elif selection == 2:
-                pass  # TODO
+                search_books()
+                break
             else:
                 add_book()
                 break
@@ -222,10 +502,3 @@ def main(username):
             read_menu()
         else:
             change_manu()
-
-"""
-# This is only for testing purposes. Remove it when it's linked with the login file.
-email_address_test = input("Email address: ")
-main(email_address_test)
-"""
-
